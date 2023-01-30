@@ -1,6 +1,6 @@
 {
-  "short_name": "To Do App",
-  "name": "To Do App",
+  "short_name": "Video Recommendation App",
+  "name": "Video Recommendation App",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
