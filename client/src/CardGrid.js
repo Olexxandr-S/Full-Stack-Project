@@ -11,6 +11,7 @@ const CustomPagination = styled(Pagination)(() => ({
   display: "flex",
   justifyContent: "center",
   margin: "3rem",
+  marginBottom: "6rem",
 }));
 
 const Item = styled(Grid)(() => ({
