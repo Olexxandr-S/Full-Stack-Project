@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Fade from "@mui/material/Fade";
+import logo from "./assets/images/logo2.png";
 
 function ScrollTop(props) {
   const { children, window } = props;
@@ -48,7 +49,7 @@ export default function Header(props) {
       <CssBaseline />
       <AppBar color="" className="app-header">
         <Toolbar>
-          <img src="/images/logo2.png" alt="logo" edge="start" />
+          <img src={logo} alt="logo" edge="start" />
           <Typography
             variant="h4"
             component="div"

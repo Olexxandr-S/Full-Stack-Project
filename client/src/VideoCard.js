@@ -54,7 +54,7 @@ export default function VideoCard({ video }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: 345 }}>
       <CardHeader title={video.title} />
       <Video video={video} />
       <CardContent>

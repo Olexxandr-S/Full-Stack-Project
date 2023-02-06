@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import signature from "./assets/images/signature.png";
 
 let dataContext = createContext();
 
@@ -44,7 +45,7 @@ function App() {
         <Typography variant="h5" component="div" color="#633F97">
           Developed by:{" "}
           <a href="https://0lexxandr-s-portfolio.vercel.app/">
-            <img src="/images/signature.png" alt="signature" height="55" />
+            <img src={signature} alt="signature" height="50" />
           </a>
           <a href="https://github.com/OlexxandrS/Full-Stack-Project">
             <GitIcon />
