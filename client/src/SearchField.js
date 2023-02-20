@@ -17,7 +17,7 @@ const SearchTextField = styled(TextField)({
 
 export default function SearchField() {
   let contextData = useContext(dataContext);
-  const allVideo = [...contextData.videoData];
+  const allVideo = [...contextData.videos];
   const [query, setQuery] = useState("");
   const [searchError, setSearchError] = useState(false);
   const handleChange = (e) => {

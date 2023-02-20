@@ -1,5 +1,4 @@
-import { createContext, useState } from "react";
-import data from ".//data/exampleResponse.json";
+import { useEffect, createContext, useState } from "react";
 import Header from "./Header";
 import CardGrid from "./CardGrid";
 import Navigation from "./Navigation";
@@ -29,14 +28,24 @@ const CustomPaper = styled(Paper)(() => ({
 }));
 
 function App() {
-  let [filteredData, setFilteredData] = useState(data);
-  const videoData = [...data];
+  const [videos, setVideos] = useState([]);
+  let [filteredData, setFilteredData] = useState(videos);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/")
+      .then((res) => res.json())
+      .then((data) => {
+        setVideos(data);
+        setFilteredData(data);
+      });
+  }, []);
+
   return (
-    <dataContext.Provider value={{ videoData, filteredData, setFilteredData }}>
+    <dataContext.Provider value={{ videos, filteredData, setFilteredData }}>
       <Header />
       <main>
         <Navigation />
-        <CardGrid />
+        {!videos.length ? <></> : <CardGrid />}
       </main>
       <CustomPaper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
@@ -47,7 +56,7 @@ function App() {
           <a href="https://0lexxandr-s-portfolio.vercel.app/">
             <img src={signature} alt="signature" height="50" />
           </a>
-          <a href="https://github.com/OlexxandrS/Full-Stack-Project">
+          <a href="https://github.com/Olexxandr-S/Full-Stack-Project">
             <GitIcon />
           </a>
         </Typography>

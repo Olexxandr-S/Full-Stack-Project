@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "videos",
+  database: "vrdata",
   port: 5432,
 });
 
@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
     .query("SELECT * FROM videosdata")
     .then((result) => {
       const videos = result.rows;
-        res.status(200).send(videos);
+      res.status(200).send(videos);
     })
     .catch((error) => {
       console.error(error);
@@ -52,6 +52,21 @@ app.delete("/:id", async (req, res) => {
     .then((result) => {
       const deletedVideo = result.rows;
       res.status(200).send(deletedVideo);
+    });
+});
+
+app.put("/", async (req, res) => {
+  const body = req.body;
+  await pool
+    .query(
+      `UPDATE videosdata SET rating = ${
+        body.action === 'increase' ? body.rating + 1 : body.rating - 1
+      } where id like ($1) RETURNING *`,
+      [body.id]
+    )
+    .then((result) => {
+      const updatedVideo = result.rows;
+      res.status(200).send(updatedVideo);
     });
 });
 

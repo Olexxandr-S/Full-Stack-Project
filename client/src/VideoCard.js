@@ -48,27 +48,56 @@ export default function VideoCard({ video }) {
   const [like, setLike] = useState(false);
 
   const deleteVideo = (id) => {
-    const allVideo = [...contextData.filteredData];
-    const newData = allVideo.filter((video) => video.id !== id);
-    contextData.setFilteredData(newData);
+    fetch(`http://localhost:5000/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        contextData.setFilteredData((prevState) =>
+          prevState.filter((video) => video.id !== data[0].id)
+        );
+      });
+  };
+
+  const updateVideo = (id, action) => {
+    fetch(`http://localhost:5000/`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      mode: "cors",
+      body: JSON.stringify({ id: id, rating: rating, action: action }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setRating(data[0].rating);
+      });
   };
 
   return (
-    <Card sx={{ width: 345 }}>
+    <Card
+      sx={{
+        width: 370,
+        display: "flex",
+        flexDirection: "column",
+        bgcolor: "#e9e0f7",
+        boxShadow: 24,
+      }}
+    >
       <CardHeader title={video.title} />
-      <Video video={video} />
       <CardContent>
+        <Video video={video} />
         <Typography variant="h6">Rating: {rating}</Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions disableSpacing sx={{ marginTop: "auto" }}>
         <LikeButton
           aria-label="like"
           disabled={disableButton}
           iconcolor={like}
           onClick={() => {
-            setRating(rating + 1);
+            // setRating(rating + 1);
             setDisableButton(true);
             setLike(true);
+            updateVideo(video.id, "increase");
           }}
         >
           <ThumbUpAltIcon />
@@ -81,6 +110,7 @@ export default function VideoCard({ video }) {
             setRating(rating - 1);
             setDisableButton(true);
             setLike(false);
+            updateVideo(video.id, "decrease");
           }}
         >
           <ThumbDownAltIcon />

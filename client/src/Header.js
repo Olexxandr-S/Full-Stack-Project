@@ -44,10 +44,14 @@ function ScrollTop(props) {
 }
 
 export default function Header(props) {
+  function refresh() {
+    window.parent.location = window.parent.location.href;
+  }
+
   return (
     <Fragment>
       <CssBaseline />
-      <AppBar color="" className="app-header">
+      <AppBar color="" className="app-header" onClick={refresh}>
         <Toolbar>
           <img src={logo} alt="logo" edge="start" />
           <Typography

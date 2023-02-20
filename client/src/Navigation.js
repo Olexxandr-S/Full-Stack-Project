@@ -63,12 +63,7 @@ const style = {
 
 export default function Navigation() {
   let contextData = useContext(dataContext);
-  const randomNumber = (max, min) => {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
   const [videoData, setVideoData] = useState({
-    id: 1,
-    rating: 1,
     title: "",
     url: "",
   });
@@ -91,7 +86,20 @@ export default function Navigation() {
       setInvalidUrl(true);
       return;
     }
-    contextData.setFilteredData([...contextData.filteredData, videoData]);
+    fetch("http://localhost:5000/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      mode: "cors",
+      body: JSON.stringify(videoData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        contextData.setFilteredData([...contextData.filteredData, data]);
+      });
+    setVideoData({
+      title: "",
+      url: "",
+    });
     handleClose();
   };
 
@@ -124,8 +132,6 @@ export default function Navigation() {
                   setVideoData({
                     ...videoData,
                     title: e.target.value,
-                    id: randomNumber(55555, 999999),
-                    rating: randomNumber(100, 1000),
                   });
                   setTitleError(false);
                 }}

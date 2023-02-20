@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.app-header :hover {
+  cursor: pointer;
+}
+
 :focus {
   outline: 3px solid black;
   outline-offset: 3px;
