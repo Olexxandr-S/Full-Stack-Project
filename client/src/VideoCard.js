@@ -48,7 +48,7 @@ export default function VideoCard({ video }) {
   const [like, setLike] = useState(false);
 
   const deleteVideo = (id) => {
-    fetch(`http://localhost:5000/${id}`, {
+    fetch(`https://enigmatic-lake-56562.herokuapp.com/${id}`, {
       method: "DELETE",
       mode: "cors",
     })
@@ -61,7 +61,7 @@ export default function VideoCard({ video }) {
   };
 
   const updateVideo = (id, action) => {
-    fetch(`http://localhost:5000/`, {
+    fetch(`https://enigmatic-lake-56562.herokuapp.com/`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       mode: "cors",

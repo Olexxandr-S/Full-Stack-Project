@@ -32,7 +32,7 @@ function App() {
   let [filteredData, setFilteredData] = useState(videos);
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
+    fetch("https://enigmatic-lake-56562.herokuapp.com/")
       .then((res) => res.json())
       .then((data) => {
         setVideos(data);

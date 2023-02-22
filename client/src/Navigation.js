@@ -86,7 +86,7 @@ export default function Navigation() {
       setInvalidUrl(true);
       return;
     }
-    fetch("http://localhost:5000/", {
+    fetch("https://enigmatic-lake-56562.herokuapp.com/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       mode: "cors",
