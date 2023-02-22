@@ -13,8 +13,11 @@
   "dependencies": {
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
+    "node-fetch": "^3.3.0",
     "pg": "^8.8.0",
+    "postgres": "^3.3.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

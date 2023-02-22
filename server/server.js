@@ -1,7 +1,14 @@
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const express = require("express");
-const { Pool } = require("pg");
+const postgres = require("postgres");
+
+require("dotenv").config();
+
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+
+const sql = postgres(URL, { ssl: "require" });
 
 const app = express();
 app.use(cors());
@@ -9,19 +16,33 @@ app.use(express.json());
 
 const port = process.env.PORT || 5000;
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "vrdata",
-  port: 5432,
-});
+async function getVideoData() {
+  const result = await sql`SELECT * FROM videosdata`;
+  return result;
+}
 
-app.get("/", (req, res) => {
-  pool
-    .query("SELECT * FROM videosdata")
+async function addVideo(data) {
+  await sql`
+  INSERT INTO videosdata 
+    (id, title, url, rating) 
+  VALUES 
+    (${data.id}, ${data.title}, ${data.url}, ${data.rating})`;
+}
+
+async function deleteVideo(id) {
+  return await sql`DELETE FROM videosdata where id = ${id} RETURNING *`;
+}
+
+async function updateVideo(data) {
+  return await sql`UPDATE videosdata SET rating = ${
+    data.action === "increase" ? data.rating + 1 : data.rating - 1
+  } where id = ${data.id} RETURNING *`;
+}
+
+app.get("/", async (req, res) => {
+  await getVideoData()
     .then((result) => {
-      const videos = result.rows;
-      res.status(200).send(videos);
+      res.status(200).send(result);
     })
     .catch((error) => {
       console.error(error);
@@ -35,39 +56,22 @@ app.post("/", async (req, res) => {
     id: uuidv4(),
     rating: Math.round(Math.random() * 100000),
   });
-  await pool.query("INSERT INTO videosdata values($1, $2, $3, $4)", [
-    video.id,
-    video.title,
-    video.url,
-    video.rating,
-  ]);
+  await addVideo(video);
   res.status(200).send(video);
 });
 
 app.delete("/:id", async (req, res) => {
-  await pool
-    .query("DELETE FROM videosdata where id like ($1) RETURNING *", [
-      req.params.id,
-    ])
-    .then((result) => {
-      const deletedVideo = result.rows;
-      res.status(200).send(deletedVideo);
-    });
+  await deleteVideo(req.params.id).then((result) => {
+    res.status(200).send(result);
+  });
 });
 
 app.put("/", async (req, res) => {
   const body = req.body;
-  await pool
-    .query(
-      `UPDATE videosdata SET rating = ${
-        body.action === 'increase' ? body.rating + 1 : body.rating - 1
-      } where id like ($1) RETURNING *`,
-      [body.id]
-    )
-    .then((result) => {
-      const updatedVideo = result.rows;
-      res.status(200).send(updatedVideo);
-    });
+  await updateVideo(body).then((result) => {
+    const updatedVideo = result;
+    res.status(200).send(updatedVideo);
+  });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
